@@ -7,6 +7,14 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    /*
+     * El middleware NO debe tocar los archivos de la PWA.
+     *
+     * manifest.json y sw.js se piden SIN cookies de sesion: si el middleware
+     * los ve como "ruta privada" los redirige al login (307) y el navegador
+     * nunca recibe el archivo. Consecuencia: no aparece la opcion de instalar
+     * la app, y en iOS el registro del service worker falla directamente.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|manifest.json|sw.js|robots.txt|icons/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 }
