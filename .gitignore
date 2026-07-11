@@ -69,3 +69,6 @@ supabase/.temp
 .claude/skills/video-visuals/assets/levy.png
 # Cache de compilacion de TypeScript, no se versiona.
 tsconfig.tsbuildinfo
+
+# Artefactos temporales de Playwright MCP
+.playwright-mcp/
