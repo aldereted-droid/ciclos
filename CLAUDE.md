@@ -331,6 +331,20 @@ npm run lint         # ESLint
 - **Fix**: Triggers en `SECURITY INVOKER` + `REVOKE EXECUTE ... FROM PUBLIC, anon, authenticated`.
 - **Aplicar en**: Toda migracion. `apply_migration` -> `get_advisors` -> arreglar hasta que de cero alertas.
 
+### 2026-07-11: El middleware rompe la PWA (manifest.json y sw.js con 307)
+- **Error**: No aparecia la opcion de instalar la app. `manifest.json` y `sw.js` devolvian **307** en produccion.
+- **Causa**: El middleware de auth los trataba como rutas privadas y los redirigia al login. Esos archivos se piden SIN cookies de sesion, asi que siempre parecen "no autenticado". El navegador recibia un redirect en vez del archivo.
+- **Fix**: Excluirlos del `matcher` en `src/proxy.ts`: `manifest.json|sw.js|robots.txt|icons/`.
+- **Pista falsa**: los iconos `.png` SI cargaban (ya estaban excluidos del matcher), lo que hacia parecer que el deploy habia funcionado.
+- **Diagnostico rapido**: `curl -o /dev/null -w "%{http_code}" <sitio>/manifest.json` -> debe dar **200**, nunca 307.
+- **Aplicar en**: Toda PWA detras de un middleware de auth. En iOS ademas el registro del service worker falla directamente ante un redirect.
+
+### 2026-07-11: Las rutas /api no deben redirigirse al login
+- **Error**: Un cron protegido con Bearer token seria redirigido al login y nunca se ejecutaria.
+- **Causa**: El middleware redirige TODA ruta sin cookie de sesion. Un cron no manda cookies: manda un header `Authorization`.
+- **Fix**: `if (pathname.startsWith('/api/')) return true` en el chequeo de rutas publicas. Cada ruta /api se autentica sola (sesion o secreto).
+- **Aplicar en**: Todo proyecto con cron jobs o webhooks.
+
 ### 2026-07-11: Nunca crear usuarios de auth con INSERT directo
 - **Error**: Usuario insertado por SQL en `auth.users` no podia loguearse.
 - **Causa**: GoTrue espera columnas de token que un INSERT manual deja en NULL. Ademas `auth.users` usa indice parcial: `ON CONFLICT (email)` falla.
