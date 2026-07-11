@@ -33,6 +33,9 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
           type="email"
           autoComplete="email"
           required
+          // Si la validacion falla, el email escrito no se pierde.
+          defaultValue={state.email ?? ''}
+          key={state.email}
           className={inputClass}
         />
         {state.fieldErrors?.email && (

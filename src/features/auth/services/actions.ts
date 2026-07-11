@@ -30,38 +30,42 @@ const signupSchema = z.object({
 
 export interface AuthResult {
   error?: string
+  /** Se devuelve para no vaciar el campo cuando la validacion falla. */
+  email?: string
   message?: string
   fieldErrors?: Record<string, string[]>
 }
 
 export async function login(_prev: AuthResult, formData: FormData): Promise<AuthResult> {
+  const email = String(formData.get('email') ?? '')
   const parsed = loginSchema.safeParse({
-    email: formData.get('email'),
+    email,
     password: formData.get('password'),
   })
 
   if (!parsed.success) {
-    return { fieldErrors: parsed.error.flatten().fieldErrors }
+    return { email, fieldErrors: parsed.error.flatten().fieldErrors }
   }
 
   const supabase = await createClient()
   const { error } = await supabase.auth.signInWithPassword(parsed.data)
 
   // Mensaje generico a proposito: no revelamos si el email existe o no.
-  if (error) return { error: 'Email o contrasena incorrectos' }
+  if (error) return { email, error: 'Email o contrasena incorrectos' }
 
   revalidatePath('/', 'layout')
   redirect('/cycles')
 }
 
 export async function signup(_prev: AuthResult, formData: FormData): Promise<AuthResult> {
+  const email = String(formData.get('email') ?? '')
   const parsed = signupSchema.safeParse({
-    email: formData.get('email'),
+    email,
     password: formData.get('password'),
   })
 
   if (!parsed.success) {
-    return { fieldErrors: parsed.error.flatten().fieldErrors }
+    return { email, fieldErrors: parsed.error.flatten().fieldErrors }
   }
 
   const supabase = await createClient()
@@ -72,9 +76,10 @@ export async function signup(_prev: AuthResult, formData: FormData): Promise<Aut
     },
   })
 
-  if (error) return { error: error.message }
+  if (error) return { email, error: error.message }
 
   // Si el proyecto exige confirmar el email no hay sesion todavia.
+  // Hoy la confirmacion esta desactivada, pero si se reactiva esto lo cubre.
   if (!data.session) {
     return { message: 'Revisa tu email para confirmar la cuenta.' }
   }
