@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test:cycle": "tsx src/features/cycle-tracking/lib/verify-cycle-calculator.ts",
     "test:regularity": "tsx src/features/cycle-tracking/lib/verify-regularity.ts",
-    "test": "npm run test:cycle && npm run test:regularity"
+    "test": "npm run test:cycle && npm run test:regularity && npm run test:notifications",
+    "test:notifications": "tsx src/features/notifications/lib/verify-notification-rules.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.0",
@@ -18,12 +19,14 @@
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "web-push": "^3.6.7",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/web-push": "^3.6.4",
     "autoprefixer": "^10.4.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.0",

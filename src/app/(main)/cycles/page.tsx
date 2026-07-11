@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getWomenWithPeriods } from '@/features/cycle-tracking/services/womenService'
 import { WomanCard } from '@/features/cycle-tracking/components/WomanCard'
+import { NotificationToggle } from '@/features/notifications/components/NotificationToggle'
 
 export const metadata = {
   title: 'Ciclos',
@@ -40,11 +41,17 @@ export default async function CyclesPage() {
           </Link>
         </div>
       ) : (
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {women.map((woman) => (
-            <WomanCard key={woman.id} woman={woman} />
-          ))}
-        </div>
+        <>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {women.map((woman) => (
+              <WomanCard key={woman.id} woman={woman} />
+            ))}
+          </div>
+
+          <div className="mt-8">
+            <NotificationToggle />
+          </div>
+        </>
       )}
     </div>
   )

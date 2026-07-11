@@ -11,6 +11,10 @@ interface CookieToSet {
 const PUBLIC_ROUTES = ['/', '/login', '/signup', '/auth']
 
 function isPublic(pathname: string): boolean {
+  // Las rutas /api se autentican solas y NO deben redirigirse al login:
+  // el cron manda un Bearer token (no una cookie) y un redirect lo romperia.
+  if (pathname.startsWith('/api/')) return true
+
   return PUBLIC_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   )
