@@ -1,0 +1,9 @@
+/* Tailwind v3: usar directivas. NO usar `@import 'tailwindcss'` (sintaxis v4):
+ * webpack intenta resolver tailwind como modulo JS y el build falla. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
