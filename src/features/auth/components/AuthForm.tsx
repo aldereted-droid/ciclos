@@ -53,8 +53,14 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
           minLength={8}
           className={inputClass}
         />
-        {state.fieldErrors?.password && (
+        {state.fieldErrors?.password ? (
           <p className="mt-1 text-xs text-red-600">{state.fieldErrors.password[0]}</p>
+        ) : (
+          mode === 'signup' && (
+            <p className="mt-1 text-xs text-gray-500">
+              Minimo 8 caracteres, con mayuscula, minuscula, numero y simbolo.
+            </p>
+          )
         )}
       </div>
 

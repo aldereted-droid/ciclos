@@ -1,0 +1,17 @@
+- generic [active] [ref=f11e1]:
+  - generic [ref=f11e4]:
+    - heading "Crear cuenta" [level=1] [ref=f11e5]
+    - paragraph [ref=f11e6]: "Tus registros son privados: solo vos los ves."
+    - generic [ref=f11e8]:
+      - generic [ref=f11e9]:
+        - text: Email
+        - textbox "Email" [ref=f11e10]
+      - generic [ref=f11e11]:
+        - text: Contrasena
+        - textbox "Contrasena" [ref=f11e12]
+      - button "Crear cuenta" [ref=f11e13] [cursor=pointer]
+    - paragraph [ref=f11e14]:
+      - text: Ya tenes cuenta?
+      - link "Entrar" [ref=f11e15] [cursor=pointer]:
+        - /url: /login
+  - alert [ref=f11e16]
